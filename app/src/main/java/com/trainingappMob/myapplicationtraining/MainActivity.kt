@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -24,8 +25,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTrainingTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    NavigationBetweenPages()
+                val navController = rememberNavController()
+                Scaffold(modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+
+                        BottomNavBar(navController = navController)
+                    } ) {
+                    NavigationBetweenPages(navController)
 
                 }
             }
@@ -35,8 +41,8 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun NavigationBetweenPages() {
-    val navController = rememberNavController()
+fun NavigationBetweenPages(navController: NavHostController) {
+    
 
     NavHost(navController = navController, startDestination = "home_page") {
         composable(route = "home_page") {
@@ -47,7 +53,13 @@ fun NavigationBetweenPages() {
         }
 
         composable(route = "workout_page") {
-            RegisterWorkout()
+            RegisterWorkout(navController)
+        }
+        composable(route = "profil_page") {
+            ProfilPage(navController)
+        }
+        composable(route="navbar") {
+            BottomNavBar(navController)
         }
 
     }
@@ -63,7 +75,9 @@ fun NavigationBetweenPages() {
 fun TrainingPreview() {
     MyApplicationTrainingTheme {
 
-        NavigationBetweenPages()
+        NavigationBetweenPages(
+            navController = TODO()
+        )
 
 
 

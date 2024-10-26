@@ -7,9 +7,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 
 @Composable
-fun ProfilPage() {
+fun ProfilPage(navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -17,4 +18,6 @@ fun ProfilPage() {
     ) {
         Text(text = "ProfilPage")
     }
+
 }
+

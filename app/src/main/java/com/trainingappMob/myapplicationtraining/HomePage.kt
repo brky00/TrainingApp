@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -54,10 +55,10 @@ fun HomePage(navController: NavHostController) {
 Column(horizontalAlignment = Alignment.CenterHorizontally) {
     Row(modifier = Modifier.fillMaxWidth().padding(top=50.dp)) {
         Card(
-            shape = androidx.compose.foundation.shape.CircleShape,
+            shape = CircleShape,
             modifier = Modifier
                 .size(40.dp) // Circle card size
-                .border(2.dp, androidx.compose.ui.graphics.Color.White, shape = androidx.compose.foundation.shape.CircleShape), // Beyaz kenarlık
+                .border(2.dp, Color.White, shape = CircleShape), // Beyaz kenarlık
             colors = CardDefaults.cardColors(containerColor = Color(0xFF6200EA))
 
 
@@ -68,7 +69,7 @@ Column(horizontalAlignment = Alignment.CenterHorizontally) {
             ) {
                 Text(
                     text = "50",
-                    color = androidx.compose.ui.graphics.Color.White, // White text Color
+                    color = Color.White, // White text Color
                     modifier = Modifier.padding(8.dp) // padding for the content
                 )
             }
@@ -111,7 +112,7 @@ Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     modifier = Modifier
                         .align(Alignment.Center)
                         .padding(8.dp),
-                    color = androidx.compose.ui.graphics.Color.Black
+                    color = Color.Black
                 )
             }
         }
@@ -134,7 +135,7 @@ Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     modifier = Modifier
                         .align(Alignment.Center)
                         .padding(8.dp),
-                    color = androidx.compose.ui.graphics.Color.Black
+                    color = Color.Black
                 )
             }
         }
@@ -166,7 +167,7 @@ Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(8.dp),
-                        color = androidx.compose.ui.graphics.Color.White
+                        color = Color.White
                     )
                 }
             }
@@ -187,7 +188,7 @@ Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(8.dp),
-                        color = androidx.compose.ui.graphics.Color.White
+                        color = Color.White
                     )
                 }
             }
@@ -215,7 +216,7 @@ Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(8.dp),
-                        color = androidx.compose.ui.graphics.Color.White
+                        color = Color.White
                     )
                 }
             }
@@ -236,7 +237,7 @@ Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(8.dp),
-                        color = androidx.compose.ui.graphics.Color.White
+                        color = Color.White
                     )
                 }
             }
@@ -244,20 +245,8 @@ Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
     }
 }
-            // menubar er ikke ferdi enda så overse dette
-            // Column (Buton and text here)
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 50.dp), // Padding bottom
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "Home Page")
-                Button(onClick = { navController.navigate("meal_page") }) {
-                    Text(text = "Go to Meal Page")
-                }
-            }
+
+
         }
     }
 }
@@ -267,7 +256,9 @@ fun TrainingPreviewHome() {
     MyApplicationTrainingTheme {
 
 
-        NavigationBetweenPages()
+        NavigationBetweenPages(
+            navController = TODO()
+        )
 
 
 
