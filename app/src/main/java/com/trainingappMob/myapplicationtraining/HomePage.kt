@@ -59,9 +59,9 @@ fun HomePage(navController: NavHostController) {
 
 Column(horizontalAlignment = Alignment.CenterHorizontally) {
     Text(
-        text = "Training App",
+        text = "Fitmeals",
         color = Color(0xFF6200EA), // purple color
-        fontSize = 28.sp,
+        fontSize = 30.sp,
         fontWeight = FontWeight.Bold, // bold font
         modifier = Modifier
             .padding(top = 20.dp) // top padding
