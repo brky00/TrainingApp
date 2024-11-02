@@ -1,5 +1,6 @@
 package com.trainingappMob.myapplicationtraining
 
+import android.util.EventLogTags.Description
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,6 +51,10 @@ fun RegisterMeal(navController: NavHostController) {
     var mealName by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var Calories by remember { mutableStateOf("") }
+    var Protein by remember { mutableStateOf("") }
+
+    // State to hold list of registered meals
+    val mealList = remember { mutableStateListOf<Meal>() }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -56,95 +64,193 @@ fun RegisterMeal(navController: NavHostController) {
             modifier = Modifier.fillMaxSize()
                 .graphicsLayer(alpha = 0.5f)
         )
+
+        // Main content
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+
+            // Register meal. TITLE
+            Text(
+                text = "Register meal page",
+                color = Color(0xFF6200EA),
+                fontSize = 30.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 8.dp)
+            )
+            Spacer(modifier = Modifier.size(4.dp))
+
+            // Content card with text fields inside
+            ElevatedCard(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(8.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Asking user to enter fields.
+                    Text(
+                        text = "Enter your Meal name and meal description:",
+                        color = Color(0xFF6200EA),
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+
+                    // Meal name label
+                    Text(
+                        text = "Meal Name:",
+                        color = Color(0xFF6200EA),
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                    // Meal name input
+                    TextField(
+                        value = mealName,
+                        onValueChange = {mealName = it},
+                        label = { Text("Enter Meal Name") },
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+
+                    // Meal description label
+                    Text(
+                        text = "Description:",
+                        color = Color(0xFF6200EA),
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                    // Meal description input
+                    TextField(
+                        value = description,
+                        onValueChange = {description = it},
+                        label = { Text("Enter description") },
+                        modifier = Modifier.padding(vertical = 4.dp),
+
+                        )
+
+                    // Calories label
+                    Text(
+                        text = "Enter calories:",
+                        color = Color(0xFF6200EA),
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+
+                    // Calories input
+                    TextField(
+                        value = Calories,
+                        onValueChange = {Calories = it},
+                        label = { Text("Enter calories") },
+                        modifier = Modifier.padding(vertical = 4.dp),
+
+                        )
+
+                    // Protein label
+                    Text(
+                        text = "Enter Protein:",
+                        color = Color(0xFF6200EA),
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+
+                    // Protein input
+                    TextField(
+                        value = Protein,
+                        onValueChange = {Protein = it},
+                        label = { Text("Enter Protein") },
+                        modifier = Modifier.padding(vertical = 4.dp),
+
+                        )
+
+                    // Button for registering meal
+                    Button(
+                        onClick = {
+                            mealList.add(Meal(mealName, description, Calories, Protein ))
+                            mealName = ""
+                            description = ""
+                            Calories = ""
+                            Protein = ""
+                        },
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        border = BorderStroke(1.dp, Color.Black)
+                    ) {
+                        Text("Register Meal!")
+                    }
+                }
+            }
+
+            Button(onClick = {navController.popBackStack() }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBackIosNew,
+                    contentDescription = "Go back"
+                )
+                Text("Go back")
+            }
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            // Table to show registered meals
+            MealTable(mealList)
+
+        }
     }
 
-    // Main content
-    Column(
-        modifier = Modifier.fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
+}
 
-        // Register meal. TITLE
-        Text(
-            text = "Register meal page",
-            color = Color(0xFF6200EA),
-            fontSize = 30.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 16.dp)
-        )
-        Spacer(modifier = Modifier.size(16.dp))
-
-        // Asking user to enter fields.
-        Text(
-            text = "Enter your Meal name and meal description:",
-            color = Color(0xFF6200EA),
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-
-        // Meal name label
-        Text(
-            text = "Meal Name:",
-            color = Color(0xFF6200EA),
-            modifier = Modifier.padding(vertical = 4.dp)
-        )
-        // Meal name input
-        TextField(
-            value = mealName,
-            onValueChange = {mealName = it},
-            label = { Text("Enter Meal Name") },
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-
-        // Meal description label
-        Text(
-            text = "Description:",
-            color = Color(0xFF6200EA),
-            modifier = Modifier.padding(vertical = 4.dp)
-        )
-        // Meal description input
-        TextField(
-            value = description,
-            onValueChange = {description = it},
-            label = { Text("Enter description") },
-            modifier = Modifier.padding(vertical = 8.dp),
-
-        )
-
-        // Button for registering meal
-        Button(
-            onClick = {/* Logic for registering meal */ },
-            modifier = Modifier.padding(vertical = 16.dp),
-            border = BorderStroke(1.dp, Color.Black)
-        ) {
-            Text("Register Meal!")
-        }
-
-        Button(onClick = {navController.popBackStack() }) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBackIosNew,
-                contentDescription = "Go back"
-            )
-            Text("Go back")
-        }
-        Column (verticalArrangement = Arrangement.Center){
-            OutlinedCard(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                ),
-                border = BorderStroke(1.dp, Color.Black),
-                modifier = Modifier.size(width = 240.dp, height = 100.dp)
+data class Meal(val mealName: String, val description: String, val calories: String, val protein: String)
+@Composable
+fun MealTable(mealList: List<Meal>){
+    Column (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ){
+        @Composable
+        fun MealTable(mealList: List<Meal>) {
+            Column(
+                modifier = Modifier
                     .fillMaxWidth()
+                    .padding(8.dp)
             ) {
-                Text(
-                    text = "Piece of Information",
-                    modifier = Modifier.padding(16.dp),
-                    textAlign = TextAlign.Center
-                )
+                // Table header
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "Meal",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "Description",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "Calories",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "Protein",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Divider(color = Color.Gray, thickness = 1.dp) // Divider for header
+
+                // Table rows for each meal
+                mealList.forEach { meal ->
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Text(text = meal.mealName, modifier = Modifier.weight(1f))
+                        Text(text = meal.description, modifier = Modifier.weight(1f))
+                        Text(text = meal.calories, modifier = Modifier.weight(1f))
+                        Text(text = meal.protein, modifier = Modifier.weight(1f))
+                    }
+                    Divider(color = Color.LightGray, thickness = 0.5.dp) // Divider for each row
+                }
             }
         }
+
     }
 }
 
