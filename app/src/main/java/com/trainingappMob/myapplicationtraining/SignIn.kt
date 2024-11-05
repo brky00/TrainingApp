@@ -1,6 +1,6 @@
 package com.trainingappMob.myapplicationtraining
 
-import android.R.attr.onClick
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,14 +21,9 @@ import androidx.navigation.NavHostController
 
 
 @Composable
-fun GoogleSignInButton(navController: NavHostController
-
-)
-
-
+fun GoogleSignInButton(navController: NavHostController?=null)
 
 {
-
     Button(
         onClick = {},
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EA)), // Mor arka plan rengi
@@ -62,9 +57,5 @@ fun GoogleSignInButton(navController: NavHostController
 @Preview(showBackground = true)
 @Composable
 fun GoogleSignInButtonPreview() {
-    GoogleSignInButton(
-
-        navController = TODO(),
-
-    )
+    GoogleSignInButton()
 }
