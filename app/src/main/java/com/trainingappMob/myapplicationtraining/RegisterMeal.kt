@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.trainingappMob.myapplicationtraining.repository.MealRepository
 import com.trainingappMob.myapplicationtraining.ui.theme.MyApplicationTrainingTheme
+import com.trainingappMob.myapplicationtraining.viewService.MealViewModel
 
 @Composable
 fun RegisterMeal(navController: NavHostController) {
@@ -46,10 +48,11 @@ fun RegisterMeal(navController: NavHostController) {
 fun MealPagePreview() {
     MyApplicationTrainingTheme {
 
+
         val navController = rememberNavController()
 
 
-        RegisterMeal(navController = navController)
+        RegisterMeal(navController = navController,)
     }
 }
 
