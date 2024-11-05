@@ -4,6 +4,7 @@ package com.trainingappMob.myapplicationtraining
 import BottomNavBar
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -24,7 +25,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.trainingappMob.myapplicationtraining.backend.googleSignIn.GoogleAuthClient
 import com.trainingappMob.myapplicationtraining.repository.MealRepository
 import com.trainingappMob.myapplicationtraining.ui.theme.MyApplicationTrainingTheme
 import com.trainingappMob.myapplicationtraining.viewService.MealViewModel
@@ -35,14 +35,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val googleAuthClient = GoogleAuthClient(applicationContext)
 
         setContent {
             MyApplicationTrainingTheme {
                 val navController = rememberNavController()
-                var isSignIn by rememberSaveable {
-                    mutableStateOf(googleAuthClient.isSingedIn())
-                }
+
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -51,20 +48,7 @@ class MainActivity : ComponentActivity() {
                     NavigationBetweenPages(
                         navController = navController,
                         paddingValues = paddingValues,
-                        isSignIn = isSignIn,
-                        googleAuthClient = googleAuthClient,
-                        onSignInClick = {
-                            lifecycleScope.launch {
-                                isSignIn = googleAuthClient.signIn(this@MainActivity)
-                            }
-                        }
-,
-                        onSignOutClick = {
-                            lifecycleScope.launch {
-                                googleAuthClient.signOut()
-                                isSignIn = false
-                            }
-                        }
+
                     )
                 }
             }
@@ -76,16 +60,12 @@ class MainActivity : ComponentActivity() {
 fun NavigationBetweenPages(
     navController: NavHostController,
     paddingValues: PaddingValues,
-    isSignIn: Boolean,
-    googleAuthClient: GoogleAuthClient,
-    onSignInClick: () -> Unit,
-    onSignOutClick: () -> Unit
 ) {
     val mealViewModel = MealViewModel(repository = MealRepository())
 
     NavHost(
         navController = navController,
-        startDestination = "signIn",
+        startDestination = "home_page",
         modifier = Modifier.padding(paddingValues)
     ) {
         composable(route = "home_page") {
@@ -103,15 +83,10 @@ fun NavigationBetweenPages(
         composable(route = "navbar") {
             BottomNavBar(navController)
         }
-        composable(route = "signIn") {
-            GoogleSignInButton(
-                navController = navController,
-                isSignIn = isSignIn,
-                googleAuthClient = googleAuthClient,
-                onSignInClick = onSignInClick,
-                onSignOutClick = onSignOutClick
-            )
+        composable(route = "welcome_page") {
+            WelcomeScreen(navController = navController)
         }
+
     }
 }
 
@@ -133,10 +108,6 @@ fun TrainingPreview() {
         NavigationBetweenPages(
             navController = navController,
             paddingValues = paddingValues,
-            isSignIn = TODO(),
-            onSignInClick = TODO(),
-            onSignOutClick = TODO(),
-            googleAuthClient = TODO(),
         )
     }
 }

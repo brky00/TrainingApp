@@ -11,9 +11,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 @Composable
-fun WelcomeScreen(onGoogleSignInClick: () -> Unit) {
+fun WelcomeScreen( navController: NavHostController,
+                   ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -31,11 +33,8 @@ fun WelcomeScreen(onGoogleSignInClick: () -> Unit) {
         )
 
         GoogleSignInButton(
-            navController = TODO(),
-            isSignIn = TODO(),
-            googleAuthClient = TODO(),
-            onSignInClick = TODO(),
-            onSignOutClick = TODO()
+            navController = navController
+
         )
     }
 }
@@ -43,5 +42,7 @@ fun WelcomeScreen(onGoogleSignInClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun WelcomeScreenPreview() {
-    WelcomeScreen(onGoogleSignInClick = {})
+    WelcomeScreen(
+        navController = TODO(),
+    )
 }

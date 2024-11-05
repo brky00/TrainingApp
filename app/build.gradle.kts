@@ -1,10 +1,10 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.android.application")
+    id("com.google.gms.google-services")
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.gms.google.services)
-
 }
+
 
 android {
     namespace = "com.trainingappMob.myapplicationtraining"
@@ -68,12 +68,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1") // Güncel versiyon olabilir
     implementation("androidx.compose.runtime:runtime-livedata")
 
-    implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.play.services.auth)
-    implementation(libs.googleid)
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth.ktx)
 
 
 
