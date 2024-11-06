@@ -75,7 +75,7 @@ fun NavigationBetweenPages(
             RegisterMeal(navController)
         }
         composable(route = "workout_page") {
-            RegisterWorkout(navController)
+            RegisterWorkout()
         }
         composable(route = "profil_page") {
             ProfilPage(navController)
