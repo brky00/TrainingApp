@@ -164,7 +164,7 @@ fun RegisterMeal(navController: NavHostController) {
 
                     // Button for registering meal
                     Button(
-                        onClick = {
+                        onClick = { // Logikk
                             mealList.add(Meal(mealName, description, Calories, Protein ))
                             mealName = ""
                             description = ""

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "201716761099",
+    "project_id": "mealworkoutapp",
+    "storage_bucket": "mealworkoutapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201716761099:android:875200e0ae99f7b3553d0e",
+        "android_client_info": {
+          "package_name": "com.trainingappMob.myapplicationtraining"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBngyoCi_DoyYYYhnoDjbXEgispFO8zyUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
