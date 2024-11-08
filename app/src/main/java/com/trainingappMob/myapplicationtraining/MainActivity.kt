@@ -35,11 +35,7 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
-                        if (navController.currentBackStackEntry?.destination?.route !in listOf("welcome_page", "login_page", "register_page")) {
-                            BottomNavBar(navController = navController)
-                        }
-                    }
+
                 ) { paddingValues ->
                     NavigationBetweenPages(
                         navController = navController,
@@ -79,7 +75,7 @@ fun NavigationBetweenPages(
             RegisterMeal(navController)
         }
         composable(route = "workout_page") {
-            RegisterWorkout()
+            RegisterWorkout(navController)
         }
         composable(route = "profil_page") {
             ProfilPage(navController)

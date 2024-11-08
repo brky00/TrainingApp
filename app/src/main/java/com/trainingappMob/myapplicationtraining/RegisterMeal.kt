@@ -29,13 +29,7 @@ fun RegisterMeal(navController: NavHostController) {
 
 
 
-            Button(onClick = {navController.popBackStack() }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBackIosNew,
-                    contentDescription = "Go back"
-                )
-                Text("Go back")
-            }
+
 
 
 
