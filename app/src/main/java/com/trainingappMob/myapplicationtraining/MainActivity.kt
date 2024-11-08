@@ -21,13 +21,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 import com.trainingappMob.myapplicationtraining.ui.theme.MyApplicationTrainingTheme
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.ktx.firestore
 
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val firestore = Firebase.firestore
         enableEdgeToEdge()
         setContent {
             MyApplicationTrainingTheme {
@@ -43,6 +45,7 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
+
         }
     }
 }

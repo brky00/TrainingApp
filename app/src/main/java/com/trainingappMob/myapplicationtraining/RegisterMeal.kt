@@ -25,6 +25,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +44,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.trainingappMob.myapplicationtraining.ui.theme.MyApplicationTrainingTheme
+import com.trainingappMob.myapplicationtraining.Meal
 
 @Composable
 fun RegisterMeal(navController: NavHostController) {
@@ -55,6 +60,23 @@ fun RegisterMeal(navController: NavHostController) {
 
     // State to hold list of registered meals
     val mealList = remember { mutableStateListOf<Meal>() }
+
+    // Firestore instance
+    val firestore = Firebase.firestore
+
+    // Set up real time listener for meals collection
+    // Launchedeffect. loading the registered meals and display them
+    LaunchedEffect(Unit) {
+        FirestoreRepo.getMeals(
+            onSuccess =  { meals ->
+                mealList.clear()
+                mealList.addAll(meals)
+            },
+            onFailure = { e ->
+                e.printStackTrace() // Error handling
+            }
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -164,12 +186,28 @@ fun RegisterMeal(navController: NavHostController) {
 
                     // Button for registering meal
                     Button(
-                        onClick = { // Logikk
-                            mealList.add(Meal(mealName, description, Calories, Protein ))
-                            mealName = ""
-                            description = ""
-                            Calories = ""
-                            Protein = ""
+                        onClick = { // Logic
+                            val newMeal = Meal(mealName, description, Calories, Protein)
+                            FirestoreRepo.addMeal(
+                                newMeal,
+                                onSuccess = {
+                                    mealName = ""
+                                    description = ""
+                                    Calories = ""
+                                    Protein = ""
+
+                                    // Update the table
+                                    FirestoreRepo.getMeals(
+                                        onSuccess = { meals ->
+                                            mealList.clear()
+                                            mealList.addAll(meals)
+                                        },
+                                        onFailure = { e -> e.printStackTrace()}
+                                    )
+                                },
+                                onFailure = {e -> e.printStackTrace()}
+                            )
+
                         },
                         modifier = Modifier.padding(vertical = 8.dp),
                         border = BorderStroke(1.dp, Color.Black)
@@ -197,7 +235,6 @@ fun RegisterMeal(navController: NavHostController) {
 
 }
 
-data class Meal(val mealName: String, val description: String, val calories: String, val protein: String)
 @Composable
 fun MealTable(mealList: List<Meal>){
     Column (
@@ -205,50 +242,41 @@ fun MealTable(mealList: List<Meal>){
             .fillMaxWidth()
             .padding(8.dp)
     ){
-        @Composable
-        fun MealTable(mealList: List<Meal>) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                // Table header
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = "Meal",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Text(
-                        text = "Description",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Text(
-                        text = "Calories",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Text(
-                        text = "Protein",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
+        // Table header
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = "Meal",
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Description",
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Calories",
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Protein",
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+        }
 
-                Divider(color = Color.Gray, thickness = 1.dp) // Divider for header
+        Divider(color = Color.Gray, thickness = 1.dp) // Divider for header
 
-                // Table rows for each meal
-                mealList.forEach { meal ->
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Text(text = meal.mealName, modifier = Modifier.weight(1f))
-                        Text(text = meal.description, modifier = Modifier.weight(1f))
-                        Text(text = meal.calories, modifier = Modifier.weight(1f))
-                        Text(text = meal.protein, modifier = Modifier.weight(1f))
-                    }
-                    Divider(color = Color.LightGray, thickness = 0.5.dp) // Divider for each row
-                }
+        // Table rows for each meal
+        mealList.forEach { meal ->
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(text = meal.mealName, modifier = Modifier.weight(1f))
+                Text(text = meal.description, modifier = Modifier.weight(1f))
+                Text(text = meal.calories, modifier = Modifier.weight(1f))
+                Text(text = meal.protein, modifier = Modifier.weight(1f))
             }
+            Divider(color = Color.LightGray, thickness = 0.5.dp) // Divider for each row
         }
 
     }
