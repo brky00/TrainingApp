@@ -64,8 +64,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.6.0-rc01")
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth") // Firebase Authentication
     implementation("com.google.firebase:firebase-firestore")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1") // Güncel versiyon olabilir
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation("androidx.compose.runtime:runtime-livedata")
 
 

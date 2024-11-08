@@ -1,3 +1,4 @@
+// WelcomeScreen.kt
 package com.trainingappMob.myapplicationtraining
 
 import androidx.compose.foundation.layout.*
@@ -12,10 +13,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.trainingappMob.myapplicationtraining.ui.theme.MyApplicationTrainingTheme
 
 @Composable
-fun WelcomeScreen( navController: NavHostController,
-                   ) {
+fun WelcomeScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -31,18 +33,29 @@ fun WelcomeScreen( navController: NavHostController,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 24.dp)
         )
-
-        GoogleSignInButton(
-            navController = navController
-
-        )
+        Button(
+            onClick = { navController.navigate("login_page") },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EA)),
+            modifier = Modifier.fillMaxWidth().padding(16.dp)
+        ) {
+            Text(text = "Login", color = Color.White)
+        }
+        Button(
+            onClick = { navController.navigate("register_page") },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EA)),
+            modifier = Modifier.fillMaxWidth().padding(16.dp)
+        ) {
+            Text(text = "Register", color = Color.White)
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun WelcomeScreenPreview() {
-    WelcomeScreen(
-        navController = TODO(),
-    )
+    MyApplicationTrainingTheme {
+        val navController = rememberNavController()
+        WelcomeScreen(navController = navController)
+    }
 }
+
