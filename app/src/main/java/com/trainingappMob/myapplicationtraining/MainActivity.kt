@@ -27,6 +27,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.trainingappMob.myapplicationtraining.repository.MealRepository
 import com.trainingappMob.myapplicationtraining.ui.theme.MyApplicationTrainingTheme
+import com.trainingappMob.myapplicationtraining.viewModel.WorkoutViewModel
 import com.trainingappMob.myapplicationtraining.viewService.MealViewModel
 import kotlinx.coroutines.launch
 
@@ -61,7 +62,9 @@ fun NavigationBetweenPages(
     navController: NavHostController,
     paddingValues: PaddingValues,
 ) {
+    // Opprett instanser av både MealViewModel og WorkoutViewModel
     val mealViewModel = MealViewModel(repository = MealRepository())
+    val workoutViewModel = WorkoutViewModel() // Opprett WorkoutViewModel her
 
     NavHost(
         navController = navController,
@@ -75,7 +78,7 @@ fun NavigationBetweenPages(
             RegisterMeal(navController)
         }
         composable(route = "workout_page") {
-            RegisterWorkout()
+            RegisterWorkout(viewModel = workoutViewModel) // Send WorkoutViewModel her
         }
         composable(route = "profil_page") {
             ProfilPage(navController)
@@ -86,9 +89,9 @@ fun NavigationBetweenPages(
         composable(route = "welcome_page") {
             WelcomeScreen(navController = navController)
         }
-
     }
 }
+
 
 
 

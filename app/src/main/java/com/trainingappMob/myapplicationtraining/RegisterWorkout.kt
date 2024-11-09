@@ -10,11 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.trainingappMob.myapplicationtraining.model.Workout
+import com.trainingappMob.myapplicationtraining.viewModel.WorkoutViewModel
 
 @Composable
-fun RegisterWorkout() {
+fun RegisterWorkout(viewModel: WorkoutViewModel) {
     var selectedExercise by remember { mutableStateOf("Push-ups") }
     var expanded by remember { mutableStateOf(false) }
     var reps by remember { mutableStateOf("") }
@@ -23,15 +24,11 @@ fun RegisterWorkout() {
     var timeTaken by remember { mutableStateOf("") }
 
     val exercises = listOf("Push-ups", "Squats", "Lunges", "Plank", "Pull-ups")
+    val workouts by viewModel.workouts.collectAsState()
 
-    // Sample data for last week's workouts
-    val workoutsLastWeek = listOf(
-        Workout("2024-10-20", "Push-ups", 20, 4, 100, "15 min"),
-        Workout("2024-10-21", "Squats", 15, 3, 120, "20 min"),
-        Workout("2024-10-22", "Lunges", 12, 4, 150, "25 min"),
-        Workout("2024-10-23", "Plank", 1, 3, 50, "5 min"),
-        Workout("2024-10-24", "Pull-ups", 10, 3, 80, "10 min")
-    )
+    LaunchedEffect(Unit) {
+        viewModel.loadWorkouts()
+    }
 
     Column(
         modifier = Modifier
@@ -42,7 +39,6 @@ fun RegisterWorkout() {
     ) {
         Text(text = "Register Workout")
 
-        // Exercise Selection with DropdownMenu
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Text(text = "Exercise:")
             Box {
@@ -69,7 +65,6 @@ fun RegisterWorkout() {
             }
         }
 
-        // Input fields for workout details
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TextFieldWithLabel(label = "Reps", value = reps) { reps = it }
             TextFieldWithLabel(label = "Sets", value = sets) { sets = it }
@@ -77,18 +72,27 @@ fun RegisterWorkout() {
             TextFieldWithLabel(label = "Time (min)", value = timeTaken) { timeTaken = it }
         }
 
-        // Submit button
         Button(onClick = {
-            // Handle workout registration (data submission logic goes here)
+            val newWorkout = Workout(
+                date = "2024-11-10",
+                exercise = selectedExercise,
+                reps = reps.toIntOrNull() ?: 0,
+                sets = sets.toIntOrNull() ?: 0,
+                caloriesBurned = calories.toIntOrNull() ?: 0,
+                timeTaken = "$timeTaken min"
+            )
+            viewModel.addWorkout(newWorkout)
         }) {
             Text(text = "Register Workout")
         }
 
-        // Displaying workouts from the last week
         Text(text = "Previous Workouts (Last Week)")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(workoutsLastWeek) { workout ->
-                WorkoutCard(workout)
+            items(workouts) { workout ->
+                WorkoutCard(
+                    workout,
+                    onDelete = { workoutId -> viewModel.deleteWorkout(workoutId) }
+                )
             }
         }
     }
@@ -107,7 +111,10 @@ fun TextFieldWithLabel(label: String, value: String, onValueChange: (String) -> 
 }
 
 @Composable
-fun WorkoutCard(workout: Workout) {
+fun WorkoutCard(
+    workout: Workout,
+    onDelete: (String) -> Unit
+) {
     Card(
         border = BorderStroke(1.dp, Color(0xFF6200EA)),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFBB86FC)),
@@ -117,21 +124,18 @@ fun WorkoutCard(workout: Workout) {
             Text(text = "Exercise: ${workout.exercise}")
             Text(text = "Reps: ${workout.reps}, Sets: ${workout.sets}")
             Text(text = "Calories: ${workout.caloriesBurned}, Time: ${workout.timeTaken}")
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Button(
+                    onClick = { onDelete(workout.id) },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                ) {
+                    Text(text = "Delete", color = Color.White)
+                }
+            }
         }
     }
-}
-
-data class Workout(
-    val date: String,
-    val exercise: String,
-    val reps: Int,
-    val sets: Int,
-    val caloriesBurned: Int,
-    val timeTaken: String
-)
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewRegisterWorkout() {
-    RegisterWorkout()
 }
