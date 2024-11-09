@@ -86,7 +86,7 @@ fun RegisterWorkout(viewModel: WorkoutViewModel) {
             Text(text = "Register Workout")
         }
 
-        Text(text = "Previous Workouts (Last Week)")
+        Text(text = "Previous Workouts")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(workouts) { workout ->
                 WorkoutCard(
@@ -131,7 +131,7 @@ fun WorkoutCard(
             ) {
                 Button(
                     onClick = { onDelete(workout.id) },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                 ) {
                     Text(text = "Delete", color = Color.White)
                 }

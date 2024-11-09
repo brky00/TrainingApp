@@ -1,6 +1,7 @@
 package com.trainingappMob.myapplicationtraining.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.trainingappMob.myapplicationtraining.model.Workout
 import kotlinx.coroutines.tasks.await
 
@@ -11,12 +12,13 @@ class WorkoutRepository {
 
     suspend fun getWorkouts(): List<Workout> {
         return workoutsCollection
+            .orderBy("date", Query.Direction.DESCENDING) // Sorts workouts by date in descending order
             .get()
             .await()
             .documents
             .map { document ->
                 document.toObject(Workout::class.java)?.apply {
-                    id = document.id  // Setter dokument-ID
+                    id = document.id
                 }
             }.filterNotNull()
     }

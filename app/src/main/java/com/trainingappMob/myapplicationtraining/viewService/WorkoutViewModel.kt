@@ -25,14 +25,14 @@ class WorkoutViewModel : ViewModel() {
     fun addWorkout(workout: Workout) {
         viewModelScope.launch {
             workoutRepository.addWorkout(workout)
-            loadWorkouts()  // Oppdaterer listen etter en ny økt er lagt til
+            loadWorkouts()
         }
     }
 
     fun deleteWorkout(workoutId: String) {
         viewModelScope.launch {
             workoutRepository.deleteWorkout(workoutId)
-            loadWorkouts()  // Oppdaterer listen etter sletting
+            loadWorkouts()
         }
     }
 }
