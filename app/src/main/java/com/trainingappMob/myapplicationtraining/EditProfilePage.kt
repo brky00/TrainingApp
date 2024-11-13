@@ -28,6 +28,7 @@ fun EditProfilePage(navController: NavHostController) {
 
     val currentUser = auth.currentUser
 
+
     // Fetching current user from the firestore
     LaunchedEffect(currentUser) {
         currentUser?.let { user ->
@@ -79,18 +80,41 @@ fun EditProfilePage(navController: NavHostController) {
                         "username" to username,
                         "birthdate" to birthdate
                     )
-                    firestore.collection("users").document(user.uid).update(updatedData)
-                        .addOnSuccessListener {
-                            Toast.makeText(context, "Profile updated successfully", Toast.LENGTH_SHORT).show()
-                            navController.popBackStack() // Back to ProfilPage
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT).show()
-                        }
+
+                    // Authentication email update with verification at email adress
+                    user.verifyBeforeUpdateEmail(email).addOnSuccessListener {
+                        Toast.makeText(context, "Verification email sent. Please check your inbox.", Toast.LENGTH_SHORT).show()
+
+                        // Firestore will be updated after user accepted it at the email
+                        firestore.collection("users").document(user.uid).update(updatedData)
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "Verify your email address to update it completely. Everything else is Updated", Toast.LENGTH_SHORT).show()
+                                navController.popBackStack() // back to ProfilPage
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(context, "Failed to update profile in Firestore", Toast.LENGTH_SHORT).show()
+                            }
+                    }.addOnFailureListener {
+                        Toast.makeText(context, "Failed to send verification email: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EA))) {
                 Text(text = "Save", color = Color.White)
             }
+            Button(
+                onClick = {
+                    navController.navigate("profil_page") {
+                        popUpTo("edit_profile_page") { inclusive = true } // EditProfilePage removed from stack
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text(text = "Back to Profile", color = Color.White)
+            }
+
+
+
         }
     }
 }

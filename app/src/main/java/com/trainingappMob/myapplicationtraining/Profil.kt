@@ -35,7 +35,7 @@ fun ProfilPage(navController: NavHostController) {
     val firestore = FirebaseFirestore.getInstance()
 
     var name by remember { mutableStateOf("Loading...") }
-    var email by remember { mutableStateOf("Loading...") }
+    //var email by remember { mutableStateOf("Loading...") }
     var username by remember { mutableStateOf("Loading...") }
     var birthdate by remember { mutableStateOf("Loading...") }
     var totalScore by remember { mutableStateOf("0") }
@@ -44,15 +44,16 @@ fun ProfilPage(navController: NavHostController) {
     val context = LocalContext.current
 
     val currentUser = auth.currentUser
+    val email = currentUser?.email ?: "N/A"
 
     // Fetching user info from Firestore
     LaunchedEffect(currentUser) {
         currentUser?.let { user ->
+            
             firestore.collection("users").document(user.uid).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
                         name = document.getString("name") ?: "N/A"
-                        email = document.getString("email") ?: "N/A"
                         username = document.getString("username") ?: "N/A"
                         birthdate = document.getString("birthdate") ?: "N/A"
                         totalScore = (document.getLong("totalScore")?.toString()) ?: "0"
