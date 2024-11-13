@@ -21,6 +21,7 @@ fun RegisterPage(navController: NavHostController) {
     var name by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var birthdate by remember { mutableStateOf("") }
+    var score by remember { mutableStateOf(0) }
 
     val auth = FirebaseAuth.getInstance()
     val firestore = FirebaseFirestore.getInstance()
@@ -51,7 +52,8 @@ fun RegisterPage(navController: NavHostController) {
                         "email" to email,
                         "name" to name,
                         "username" to username,
-                        "birthdate" to birthdate
+                        "birthdate" to birthdate,
+                        "totalScore" to score
                     )
                     firestore.collection("users").document(userId).set(user)
                         .addOnSuccessListener {
