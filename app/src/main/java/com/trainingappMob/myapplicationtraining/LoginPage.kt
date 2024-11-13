@@ -1,4 +1,4 @@
-// LoginPage.kt
+// LoginPage
 package com.trainingappMob.myapplicationtraining
 
 import android.widget.Toast
@@ -57,7 +57,7 @@ fun LoginPage(navController: NavHostController) {
                 imageVector = Icons.Filled.ArrowBackIosNew,
                 contentDescription = "Go back"
             )
-            Text("Go back")
+            Text("Go back ")
         }
     }
 }
