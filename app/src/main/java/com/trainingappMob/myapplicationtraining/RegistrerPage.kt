@@ -9,7 +9,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,6 +37,14 @@ fun RegisterPage(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            text = "Registrer User Account",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF6200EA),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
         TextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
         Spacer(modifier = Modifier.height(8.dp))
         TextField(value = password, onValueChange = { password = it }, label = { Text("Password") })
@@ -70,12 +82,14 @@ fun RegisterPage(navController: NavHostController) {
         }) {
             Text("Register")
         }
-        Button(onClick = {navController.popBackStack() }) {
+        Button(onClick = { navController.navigate("welcome_page") {
+            popUpTo("registrer_page") { inclusive = true }
+        } }) {
             Icon(
                 imageVector = Icons.Filled.ArrowBackIosNew,
                 contentDescription = "Go back"
             )
-            Text("Go back")
+            Text("Go back to welcome page")
         }
     }
 }

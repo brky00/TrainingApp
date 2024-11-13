@@ -64,7 +64,9 @@ fun LoginPage(navController: NavHostController) {
         }) {
             Text("Login")
         }
-        Button(onClick = {navController.popBackStack() }) {
+        Button(onClick = { navController.navigate("welcome_page") {
+            popUpTo("login_page") { inclusive = true }
+        } }) {
             Icon(
                 imageVector = Icons.Filled.ArrowBackIosNew,
                 contentDescription = "Go back"
