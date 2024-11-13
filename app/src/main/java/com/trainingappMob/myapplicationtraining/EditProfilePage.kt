@@ -22,7 +22,6 @@ fun EditProfilePage(navController: NavHostController) {
     val context = LocalContext.current
 
     var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var birthdate by remember { mutableStateOf("") }
 
@@ -35,7 +34,6 @@ fun EditProfilePage(navController: NavHostController) {
                 .addOnSuccessListener { document ->
                     if (document != null) {
                         name = document.getString("name") ?: ""
-                        email = document.getString("email") ?: ""
                         username = document.getString("username") ?: ""
                         birthdate = document.getString("birthdate") ?: ""
                     }
@@ -62,8 +60,7 @@ fun EditProfilePage(navController: NavHostController) {
             TextField(value = name, onValueChange = { name = it }, label = { Text("Name") })
             Spacer(modifier = Modifier.height(8.dp))
 
-            TextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
-            Spacer(modifier = Modifier.height(8.dp))
+
 
             TextField(value = username, onValueChange = { username = it }, label = { Text("Username") })
             Spacer(modifier = Modifier.height(8.dp))
@@ -75,7 +72,6 @@ fun EditProfilePage(navController: NavHostController) {
                 currentUser?.let { user ->
                     val updatedData = mapOf(
                         "name" to name,
-                        "email" to email,
                         "username" to username,
                         "birthdate" to birthdate
                     )
@@ -90,6 +86,19 @@ fun EditProfilePage(navController: NavHostController) {
                 }
             }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EA))) {
                 Text(text = "Save", color = Color.White)
+            }
+
+            // Back button to navigate to ProfilPage
+            Button(
+                onClick = {
+                    navController.navigate("profil_page") {
+                        popUpTo("edit_profile_page") { inclusive = true }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text(text = "Back to Profile", color = Color.White)
             }
         }
     }
