@@ -3,6 +3,7 @@ package com.trainingappMob.myapplicationtraining
 import BottomNavBar
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -37,6 +38,7 @@ fun ProfilPage(navController: NavHostController) {
     var email by remember { mutableStateOf("Loading...") }
     var username by remember { mutableStateOf("Loading...") }
     var birthdate by remember { mutableStateOf("Loading...") }
+    var totalScore by remember { mutableStateOf("0") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
 
@@ -52,6 +54,7 @@ fun ProfilPage(navController: NavHostController) {
                         email = document.getString("email") ?: "N/A"
                         username = document.getString("username") ?: "N/A"
                         birthdate = document.getString("birthdate") ?: "N/A"
+                        totalScore = (document.getLong("totalScore")?.toString()) ?: "0"
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -94,6 +97,39 @@ fun ProfilPage(navController: NavHostController) {
                     fontWeight = FontWeight.Bold
                 ),
                 modifier = Modifier.padding(vertical = 8.dp)
+            )
+
+            // Total Score Card
+            Card(
+                shape = CircleShape,
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF6200EA)),
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(vertical = 16.dp),
+                elevation = CardDefaults.cardElevation(8.dp)
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(
+                        text = totalScore,
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+            }
+            Text(
+                text = "Total Score",
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF6200EA)
+                ),
+                modifier = Modifier.padding(bottom = 16.dp)
             )
 
             // User account info and rows
