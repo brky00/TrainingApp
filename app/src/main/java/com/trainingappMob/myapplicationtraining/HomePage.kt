@@ -1,6 +1,7 @@
 package com.trainingappMob.myapplicationtraining
 
 import BottomNavBar
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -41,17 +42,20 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.trainingappMob.myapplicationtraining.components.MealCard
 import com.trainingappMob.myapplicationtraining.viewService.MealViewModel
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 
 // version 2
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomePage(navController: NavHostController, viewModel: MealViewModel) {
     Scaffold(
         bottomBar = { BottomNavBar(navController = navController) }
-    ) { paddingValues ->
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
         ) {
             // states
             val meals = viewModel.meals.collectAsState().value
@@ -179,50 +183,69 @@ fun HomePage(navController: NavHostController, viewModel: MealViewModel) {
                     }
 
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(top = 40.dp)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = selectedGoal ?: "Please choose a goal",
-                            fontSize = if (selectedGoal == "Please choose a goal") 23.sp else 24.sp,
-                            fontWeight = if (selectedGoal == "Please choose a goal") FontWeight.SemiBold else FontWeight.Bold,
-                            color = if (selectedGoal == "Please choose a goal") Color.Black else Color(0xFF6200EA),
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
+                        LazyColumn(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 56.dp) // padding for bottombar
+                        ) {
+                            item {
+                                Text(
+                                    text = selectedGoal ?: "Please choose a goal",
+                                    fontSize = if (selectedGoal == "Please choose a goal") 23.sp else 24.sp,
+                                    fontWeight = if (selectedGoal == "Please choose a goal") FontWeight.SemiBold else FontWeight.Bold,
+                                    color = if (selectedGoal == "Please choose a goal") Color.Black else Color(0xFF6200EA),
+                                    modifier = Modifier.padding(top = 8.dp)
+                                )
+                            }
 
-                        // recommended meals
-                        if (loading) {
-                            Text(
-                                text = "Loading...",
-                                fontSize = 25.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black,
-                                modifier = Modifier.padding(top = 16.dp)
-                            )
-                        } else if (selectedGoal != "Please choose a goal") {
-                            Text(
-                                text = "Recommended meals for your goal:",
-                                fontSize = 19.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(top = 16.dp)
-                            )
-                            meals.chunked(2).forEach { rowMeals ->
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceEvenly
-                                ) {
-                                    rowMeals.forEach { meal ->
-                                        MealCard(meal)
+                            if (loading) {
+                                item {
+                                    Text(
+                                        text = "Loading...",
+                                        fontSize = 25.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.Black,
+                                        modifier = Modifier.padding(top = 16.dp)
+                                    )
+                                }
+                            } else if (selectedGoal != "Please choose a goal") {
+                                item {
+                                    Text(
+                                        text = "Recommended meals for your goal:",
+                                        fontSize = 19.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.padding(top = 16.dp)
+                                    )
+                                }
+
+                                items(meals.chunked(2)) { rowMeals ->
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceEvenly
+                                    ) {
+                                        rowMeals.forEach { meal ->
+                                            MealCard(meal)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+
+
                 }
             }
         }
+
     }
 }
+
 
 
 
