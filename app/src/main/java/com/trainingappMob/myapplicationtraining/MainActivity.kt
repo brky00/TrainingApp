@@ -80,6 +80,10 @@ fun NavigationBetweenPages(
         composable(route = "profil_page") {
             ProfilPage(navController)
         }
+        composable(route = "edit_profile_page") {
+            EditProfilePage(navController = navController)
+        }
+
     }
 }
 

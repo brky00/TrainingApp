@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -96,6 +97,20 @@ fun ProfilPage(navController: NavHostController) {
                 ),
                 modifier = Modifier.padding(vertical = 8.dp)
             )
+
+            // Edit Profile button
+            IconButton(
+                onClick = {
+                    navController.navigate("edit_profile_page")
+                },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = "Edit Profile",
+                    tint = Color(0xFF6200EA)
+                )
+            }
 
             // Total Score Card
             Card(
