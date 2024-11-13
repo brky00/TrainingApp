@@ -1,5 +1,5 @@
+// MainActivity.kt
 package com.trainingappMob.myapplicationtraining
-
 
 import BottomNavBar
 import android.annotation.SuppressLint
@@ -19,43 +19,57 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
+import com.trainingappMob.myapplicationtraining.repository.MealRepository
 import com.trainingappMob.myapplicationtraining.ui.theme.MyApplicationTrainingTheme
+import com.trainingappMob.myapplicationtraining.viewService.MealViewModel
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             MyApplicationTrainingTheme {
                 val navController = rememberNavController()
-                Scaffold(modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
 
-                        BottomNavBar(navController = navController)
-                    } ) {
-                        paddingValues ->
-                    // padding in ui elements with paddingValues
-                    NavigationBetweenPages(navController, paddingValues)
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
 
+                ) { paddingValues ->
+                    NavigationBetweenPages(
+                        navController = navController,
+                        paddingValues = paddingValues,
+                    )
                 }
             }
         }
     }
 }
 
-
 @Composable
-fun NavigationBetweenPages(navController: NavHostController, paddingValues: PaddingValues) {
+fun NavigationBetweenPages(
+    navController: NavHostController,
+    paddingValues: PaddingValues,
+) {
+    val mealViewModel = MealViewModel(repository = MealRepository())
 
     NavHost(
         navController = navController,
-        startDestination = "home_page",
+        startDestination = "welcome_page",
         modifier = Modifier.padding(paddingValues)
     ) {
+        composable(route = "welcome_page") {
+            WelcomeScreen(navController = navController)
+        }
+        composable(route = "login_page") {
+            LoginPage(navController = navController)
+        }
+        composable(route = "register_page") {
+            RegisterPage(navController = navController)
+        }
         composable(route = "home_page") {
-            HomePage(navController)
+            HomePage(navController, viewModel = mealViewModel)
         }
         composable(route = "meal_page") {
             RegisterMeal(navController)
@@ -66,16 +80,12 @@ fun NavigationBetweenPages(navController: NavHostController, paddingValues: Padd
         composable(route = "profil_page") {
             ProfilPage(navController)
         }
-        composable(route="navbar") {
-            BottomNavBar(navController)
+        composable(route = "edit_profile_page") {
+            EditProfilePage(navController = navController)
         }
+
     }
 }
-
-
-
-
-
 
 @Preview(showBackground = true)
 @Composable
@@ -83,12 +93,11 @@ fun TrainingPreview() {
     MyApplicationTrainingTheme {
         val navController = rememberNavController()
 
-
         val paddingValues = PaddingValues(0.dp)
 
         NavigationBetweenPages(
             navController = navController,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 }

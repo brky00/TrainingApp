@@ -1,17 +1,20 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.android.application")
+    id("com.google.gms.google-services")
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
+
 android {
     namespace = "com.trainingappMob.myapplicationtraining"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.trainingappMob.myapplicationtraining"
         minSdk = 23
-        targetSdk = 34
+        //noinspection EditedTargetSdkVersion
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -59,6 +62,19 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.1.1")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.6.0-rc01")
+    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth") // Firebase Authentication
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("androidx.compose.runtime:runtime-livedata")
+
+
+
+
+
+
+
 
 
 

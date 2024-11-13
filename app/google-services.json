@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "201716761099",
+    "project_id": "mealworkoutapp",
+    "storage_bucket": "mealworkoutapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201716761099:android:875200e0ae99f7b3553d0e",
+        "android_client_info": {
+          "package_name": "com.trainingappMob.myapplicationtraining"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "201716761099-s8ou8gpvk6l7rulfknvemuuvman9gss7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trainingappMob.myapplicationtraining",
+            "certificate_hash": "a93e18ee9d85234431e2dd0f65b0a80ac0531a69"
+          }
+        },
+        {
+          "client_id": "201716761099-p4tvsqhol0abmgrteqabsdd3kmrd5h3f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBngyoCi_DoyYYYhnoDjbXEgispFO8zyUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "201716761099-p4tvsqhol0abmgrteqabsdd3kmrd5h3f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
