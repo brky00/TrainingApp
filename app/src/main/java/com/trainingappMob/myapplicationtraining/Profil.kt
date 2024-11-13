@@ -2,9 +2,14 @@ package com.trainingappMob.myapplicationtraining
 
 import BottomNavBar
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
@@ -67,7 +72,7 @@ fun ProfilPage(navController: NavHostController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Profil Resmi
+            // Profil Resmi ve İsim
             Card(
                 shape = CircleShape,
                 elevation = CardDefaults.cardElevation(8.dp),
@@ -81,36 +86,68 @@ fun ProfilPage(navController: NavHostController) {
                     modifier = Modifier.fillMaxSize()
                 )
             }
-
-            // Kullanıcı Bilgileri
-            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = name,
                 style = TextStyle(
                     color = Color(0xFF6200EA),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
-                )
+                ),
+                modifier = Modifier.padding(vertical = 8.dp)
             )
-            Spacer(modifier = Modifier.height(8.dp))
+
+            // Kullanıcı Bilgileri Satırları
+            ProfileInfoRow(
+                icon = Icons.Filled.Email,
+                label = "Email",
+                value = email
+            )
+            HorizontalDivider(color = Color.Gray, thickness = 1.dp)
+
+            ProfileInfoRow(
+                icon = Icons.Filled.AccountCircle,
+                label = "Username",
+                value = username
+            )
+            HorizontalDivider(color = Color.Gray, thickness = 1.dp)
+
+            ProfileInfoRow(
+                icon = Icons.Filled.CalendarToday,
+                label = "D.O.B",
+                value = birthdate
+            )
+            HorizontalDivider(color = Color.Gray, thickness = 1.dp)
+        }
+    }
+}
+
+@Composable
+fun ProfileInfoRow(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = "$label icon",
+            tint = Color(0xFF6200EA),
+            modifier = Modifier
+                .size(32.dp)
+                .padding(end = 16.dp)
+        )
+        Column {
             Text(
-                text = "Email: $email",
+                text = label,
                 style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    fontWeight = FontWeight.Bold
                 )
             )
-            Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Username: $username",
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Birthdate: $birthdate",
+                text = value,
                 style = TextStyle(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
