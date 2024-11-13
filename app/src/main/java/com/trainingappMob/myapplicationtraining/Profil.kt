@@ -3,7 +3,6 @@ package com.trainingappMob.myapplicationtraining
 import BottomNavBar
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -27,7 +26,6 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.trainingappMob.myapplicationtraining.ui.theme.MyApplicationTrainingTheme
-import com.trainingappMob.myapplicationtraining.R
 
 @Composable
 fun ProfilPage(navController: NavHostController) {
@@ -75,7 +73,7 @@ fun ProfilPage(navController: NavHostController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Profil Resmi ve İsim
+            // Profil image and name
             Card(
                 shape = CircleShape,
                 elevation = CardDefaults.cardElevation(8.dp),
@@ -161,7 +159,7 @@ fun ProfilPage(navController: NavHostController) {
                     auth.signOut()
                     Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
                     navController.navigate("login_page") {
-                        popUpTo("profil_page") { inclusive = true } // Geçmişten profil sayfasını kaldır
+                        popUpTo("profil_page") { inclusive = true } // remove profil page from stack
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EA))
