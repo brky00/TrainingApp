@@ -25,6 +25,7 @@ fun RegisterWorkout(viewModel: WorkoutViewModel) {
 
     val exercises = listOf("Push-ups", "Squats", "Lunges", "Plank", "Pull-ups")
     val workouts by viewModel.workouts.collectAsState()
+    var workoutToEdit by remember { mutableStateOf<Workout?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.loadWorkouts()
@@ -37,7 +38,7 @@ fun RegisterWorkout(viewModel: WorkoutViewModel) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Register Workout")
+        Text(text = if (workoutToEdit == null) "Register Workout" else "Edit Workout")
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Text(text = "Exercise:")
@@ -73,7 +74,8 @@ fun RegisterWorkout(viewModel: WorkoutViewModel) {
         }
 
         Button(onClick = {
-            val newWorkout = Workout(
+            val workout = Workout(
+                id = workoutToEdit?.id ?: "",
                 date = "2024-11-10",
                 exercise = selectedExercise,
                 reps = reps.toIntOrNull() ?: 0,
@@ -81,9 +83,14 @@ fun RegisterWorkout(viewModel: WorkoutViewModel) {
                 caloriesBurned = calories.toIntOrNull() ?: 0,
                 timeTaken = "$timeTaken min"
             )
-            viewModel.addWorkout(newWorkout)
+            if (workoutToEdit == null) {
+                viewModel.addWorkout(workout)
+            } else {
+                viewModel.updateWorkout(workout)
+                workoutToEdit = null
+            }
         }) {
-            Text(text = "Register Workout")
+            Text(text = if (workoutToEdit == null) "Register Workout" else "Update Workout")
         }
 
         Text(text = "Previous Workouts")
@@ -91,7 +98,8 @@ fun RegisterWorkout(viewModel: WorkoutViewModel) {
             items(workouts) { workout ->
                 WorkoutCard(
                     workout,
-                    onDelete = { workoutId -> viewModel.deleteWorkout(workoutId) }
+                    onDelete = { workoutId -> viewModel.deleteWorkout(workoutId) },
+                    onEdit = { workoutToEdit = it }
                 )
             }
         }
@@ -113,7 +121,8 @@ fun TextFieldWithLabel(label: String, value: String, onValueChange: (String) -> 
 @Composable
 fun WorkoutCard(
     workout: Workout,
-    onDelete: (String) -> Unit
+    onDelete: (String) -> Unit,
+    onEdit: (Workout) -> Unit
 ) {
     Card(
         border = BorderStroke(1.dp, Color(0xFF6200EA)),
@@ -134,6 +143,13 @@ fun WorkoutCard(
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                 ) {
                     Text(text = "Delete", color = Color.White)
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(
+                    onClick = { onEdit(workout) },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+                ) {
+                    Text(text = "Edit", color = Color.White)
                 }
             }
         }

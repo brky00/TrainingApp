@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-
 class WorkoutViewModel : ViewModel() {
 
     private val workoutRepository = WorkoutRepository()
@@ -25,6 +24,13 @@ class WorkoutViewModel : ViewModel() {
     fun addWorkout(workout: Workout) {
         viewModelScope.launch {
             workoutRepository.addWorkout(workout)
+            loadWorkouts()
+        }
+    }
+
+    fun updateWorkout(workout: Workout) {
+        viewModelScope.launch {
+            workoutRepository.updateWorkout(workout)
             loadWorkouts()
         }
     }

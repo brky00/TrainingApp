@@ -12,7 +12,7 @@ class WorkoutRepository {
 
     suspend fun getWorkouts(): List<Workout> {
         return workoutsCollection
-            .orderBy("date", Query.Direction.DESCENDING) // Sorts workouts by date in descending order
+            .orderBy("date", Query.Direction.DESCENDING)
             .get()
             .await()
             .documents
@@ -27,7 +27,12 @@ class WorkoutRepository {
         workoutsCollection.add(workout).await()
     }
 
+    suspend fun updateWorkout(workout: Workout) {
+        workoutsCollection.document(workout.id).set(workout).await()
+    }
+
     suspend fun deleteWorkout(workoutId: String) {
         workoutsCollection.document(workoutId).delete().await()
     }
 }
+
