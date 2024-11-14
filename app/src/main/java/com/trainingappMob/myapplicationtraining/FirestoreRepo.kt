@@ -5,24 +5,45 @@ import com.google.firebase.firestore.toObject
 import com.trainingappMob.myapplicationtraining.Meal
 
 object FirestoreRepo {
-    private val firestore = FirebaseFirestore.getInstance()
+
+    private fun firestore() = FirebaseFirestore.getInstance()
 
     // Function to register meal
     fun addMeal(meal: Meal, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        firestore.collection("meals")
+        firestore().collection("meals")
             .add(meal)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
     }
 
     // Function to retrieve meal
-    fun getMeals(onSuccess: (List<Meal>) -> Unit, onFailure: (Exception) -> Unit) {
-        firestore.collection("meals")
+    fun getMeals(onSuccess: (List<Pair<String, Meal>>) -> Unit, onFailure: (Exception) -> Unit) {
+        firestore().collection("meals")
             .get()
             .addOnSuccessListener { result ->
-                val meals = result.mapNotNull { it.toObject(Meal::class.java) }
+                val meals = result.documents.mapNotNull { document ->
+                    document.toObject(Meal::class.java)?.let { meal ->
+                        document.id to meal
+                    }
+                }
                 onSuccess(meals)
             }
-            .addOnFailureListener{onFailure(it)}
+            .addOnFailureListener { onFailure(it) }
+    }
+
+    // Function to update
+    fun updateMeal(id: String, updatedMeal: Meal, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        firestore().collection("meals").document(id)
+            .set(updatedMeal)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
+
+    // function to delete
+    fun deleteMeal(id: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        firestore().collection("meals").document(id)
+            .delete()
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e) }
     }
 }
