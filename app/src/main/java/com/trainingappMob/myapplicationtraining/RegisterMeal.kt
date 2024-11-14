@@ -186,7 +186,7 @@ fun RegisterMeal(navController: NavHostController) {
 
                     // Button for registering meal
                     Button(
-                        onClick = { // Logic
+                        onClick = { // Logic for registering
                             val newMeal = Meal(mealName, description, Calories, Protein)
                             FirestoreRepo.addMeal(
                                 newMeal,
@@ -196,7 +196,7 @@ fun RegisterMeal(navController: NavHostController) {
                                     Calories = ""
                                     Protein = ""
 
-                                    // Update the table
+                                    // Update the table or retrieving data from the DB and read them in the table
                                     FirestoreRepo.getMeals(
                                         onSuccess = { meals ->
                                             mealList.clear()
