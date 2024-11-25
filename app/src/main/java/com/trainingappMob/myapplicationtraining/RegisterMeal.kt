@@ -121,7 +121,7 @@ fun RegisterMeal(navController: NavHostController) {
     Box(modifier = Modifier.fillMaxSize()) {
 
         Image(
-            painter = painterResource(id = R.drawable.meal3),
+            painter = painterResource(id = R.drawable.chicken),
             contentDescription = "Background Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
