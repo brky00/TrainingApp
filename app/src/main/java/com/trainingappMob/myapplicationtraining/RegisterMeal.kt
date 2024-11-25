@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.trainingappMob.myapplicationtraining.model.Meals
 import com.trainingappMob.myapplicationtraining.repository.FirestoreRepo
 import com.trainingappMob.myapplicationtraining.repository.MealRepository
@@ -73,6 +74,8 @@ fun RegisterMeal(navController: NavHostController) {
 
     // Variable that tracks meal being edited
     var mealToEdit by remember { mutableStateOf<String?>(null) }
+
+    val auth = FirebaseAuth.getInstance()
 
     // Set up real time listener for meals collection
     // Launchedeffect. loading the registered meals and display them
