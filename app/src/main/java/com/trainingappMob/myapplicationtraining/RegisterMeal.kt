@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Delete
@@ -90,6 +91,9 @@ fun RegisterMeal(navController: NavHostController) {
             }
         )
     }
+
+    // Show only the last 7 meals to the table
+    val last7Meals = mealList.takeLast(7)
 
     // Show snackbar message
     fun showSnackBar(message: String) {
@@ -294,7 +298,8 @@ fun RegisterMeal(navController: NavHostController) {
 
             // Table to show data and function to delete and update
             MealTable(
-                mealList = mealList,
+
+                mealList = last7Meals,
                 onUpdate = { id, meal -> handleUpdate(id, meal) },
                 onDelete = { id -> handleDelete(id) }
             )
@@ -318,77 +323,143 @@ fun MealTable(
               onUpdate: (String, Meal) -> Unit,
               onDelete: (String) -> Unit
     ){
-    Column (
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
             .background(Color.White)
-    ){
-        // Table header
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                text = "Meal",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-
-            )
-            Text(
-                text = "Description",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-            Text(
-                text = "Calories",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-            Text(
-                text = "Protein",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        Divider(color = Color.Gray, thickness = 1.dp) // Divider for header
-
-        // Table rows for each meal
-        mealList.forEach { (id, meal) ->
-            Row(modifier = Modifier.fillMaxWidth()
-                .padding(vertical = 4.dp)
+            .padding(8.dp)
+    ) {
+        // Adding scroll ability
+        androidx.compose.foundation.rememberScrollState().let { scrollState ->
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
             ) {
-                Text(text = meal.mealName, modifier = Modifier.weight(1f))
-                Text(text = meal.description, modifier = Modifier.weight(1f))
-                Text(text = meal.calories, modifier = Modifier.weight(1f))
-                Text(text = meal.protein, modifier = Modifier.weight(1f))
-
-                // Update and delete buttons for each row
+                // Table header
                 Row(
-                    modifier = Modifier.weight(0.7f),
-                    horizontalArrangement = Arrangement.Center
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp)
+                        .background(Color(0xFFEFEFEF)),
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Update",
-                        tint = Color.Blue,
-                        modifier = Modifier
-                            .size(20.dp)
-                            .clickable { onUpdate(id, meal) }
-                            .padding(end = 8.dp)
-                    )
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete",
-                        tint = Color.Red,
-                        modifier = Modifier
-                            .size(20.dp)
-                            .clickable { onDelete(id) }
 
+                    //  Meal
+                    Text(
+                        text = "Meal",
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    //  description
+                    Text(
+                        text = "Description",
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1.5f)
+                    )
+
+                    // Calories
+                    Text(
+                        text = "Calories",
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    Text(
+                        text = "Protein",
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    // Actions
+                    Text(
+                        text = "Action",
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(0.7f)
                     )
                 }
-            }
-            Divider(color = Color.LightGray, thickness = 0.5.dp) // Divider for each row
-        }
+                
+                // Divider
+                Divider(color = Color.Gray, thickness = 1.dp)
 
+                // Table rows for each meal
+                mealList.forEach { (id, meal) ->
+                    Row (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                            .background(Color(0xFFF9F9F9)),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+
+                        // Meal name
+                        Text(
+                            text = meal.mealName,
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+
+                        // Description
+                        Text(
+                            text = meal.description,
+                            modifier = Modifier.weight(1.5f),
+                            textAlign = TextAlign.Start,
+                            maxLines = 2
+                        )
+
+                        // Calories
+                        Text(
+                            text = meal.calories,
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+
+                        //  Protein
+                        Text(
+                            text = meal.protein,
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+
+                        // Action buttons
+                        Row (
+                            modifier = Modifier.weight(0.7f),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+
+                            // Update icon
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Update",
+                                tint = Color.Blue,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .clickable { onUpdate(id, meal) }
+                                    .padding(end = 8.dp)
+                            )
+
+                            // Delete icon
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Update",
+                                tint = Color.Red,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .clickable { onDelete(id) }
+
+                            )
+                        }
+                    }
+                    Divider(color = Color.LightGray, thickness = 0.5.dp)
+                }
+            }
+        }
     }
 }
 
