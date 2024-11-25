@@ -55,6 +55,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterMeal(navController: NavHostController) {
+
     // Making in app messages
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
