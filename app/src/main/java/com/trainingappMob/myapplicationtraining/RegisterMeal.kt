@@ -48,6 +48,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.trainingappMob.myapplicationtraining.model.Meals
+import com.trainingappMob.myapplicationtraining.repository.FirestoreRepo
 import com.trainingappMob.myapplicationtraining.repository.MealRepository
 import com.trainingappMob.myapplicationtraining.ui.theme.MyApplicationTrainingTheme
 import com.trainingappMob.myapplicationtraining.viewService.MealViewModel
@@ -67,7 +69,7 @@ fun RegisterMeal(navController: NavHostController) {
     var Protein by remember { mutableStateOf("") }
 
     // State to hold list of registered meals
-    val mealList = remember { mutableStateListOf<Pair<String, Meal>>() }
+    val mealList = remember { mutableStateListOf<Pair<String, Meals>>() }
 
     // Variable that tracks meal being edited
     var mealToEdit by remember { mutableStateOf<String?>(null) }
@@ -97,7 +99,7 @@ fun RegisterMeal(navController: NavHostController) {
     }
 
     // Function to handle update
-    fun handleUpdate(mealID: String, meal: Meal) {
+    fun handleUpdate(mealID: String, meal: Meals) {
         mealToEdit = mealID
         mealName = meal.mealName
         description = meal.description
@@ -123,7 +125,7 @@ fun RegisterMeal(navController: NavHostController) {
             contentDescription = "Background Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
-                .graphicsLayer(alpha = 0.5f)
+                .graphicsLayer(alpha = 0.5f) 
         )
 
         // Main content
@@ -226,7 +228,7 @@ fun RegisterMeal(navController: NavHostController) {
                     // Button for registering meal or updating meal
                     Button(
                         onClick = { // Logic for registering
-                            val meal = Meal(mealName, description, Calories, Protein)
+                            val meal = Meals(mealName, description, Calories, Protein)
                             if (mealToEdit == null) {
 
                                 // Register new meal
@@ -312,9 +314,9 @@ fun RegisterMeal(navController: NavHostController) {
 
 @Composable
 fun MealTable(
-    mealList: List<Pair<String, Meal>>,
+    mealList: List<Pair<String, Meals>>,
     // adding inline options
-    onUpdate: (String, Meal) -> Unit,
+    onUpdate: (String, Meals) -> Unit,
     onDelete: (String) -> Unit
 ){
 

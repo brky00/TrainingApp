@@ -2,14 +2,15 @@ package com.trainingappMob.myapplicationtraining.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
-import com.trainingappMob.myapplicationtraining.Meal
+import com.trainingappMob.myapplicationtraining.model.Meals
+
 
 object FirestoreRepo {
 
     private fun firestore() = FirebaseFirestore.getInstance()
 
     // Function to register meal
-    fun addMeal(meal: Meal, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun addMeal(meal: Meals, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         firestore().collection("meals")
             .add(meal)
             .addOnSuccessListener { onSuccess() }
@@ -17,12 +18,12 @@ object FirestoreRepo {
     }
 
     // Function to retrieve meal
-    fun getMeals(onSuccess: (List<Pair<String, Meal>>) -> Unit, onFailure: (Exception) -> Unit) {
+    fun getMeals(onSuccess: (List<Pair<String, Meals>>) -> Unit, onFailure: (Exception) -> Unit) {
         firestore().collection("meals")
             .get()
             .addOnSuccessListener { result ->
                 val meals = result.documents.mapNotNull { document ->
-                    document.toObject(Meal::class.java)?.let { meal ->
+                    document.toObject(Meals::class.java)?.let { meal ->
                         document.id to meal
                     }
                 }
@@ -32,7 +33,7 @@ object FirestoreRepo {
     }
 
     // Function to update
-    fun updateMeal(id: String, updatedMeal: Meal, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun updateMeal(id: String, updatedMeal: Meals, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         firestore().collection("meals").document(id)
             .set(updatedMeal)
             .addOnSuccessListener { onSuccess() }
