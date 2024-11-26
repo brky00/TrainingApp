@@ -34,14 +34,14 @@ fun MealCard(meal: Meal) {
         Column {
             val imageResId = getImageResourceId(meal.imageName)
 
-            // Bruk Coil med minneoptimalisering (skaler bildet til ønsket størrelse)
+            // Used Coil with memory optimalization (scalling imagee)
             val painter = rememberAsyncImagePainter(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(imageResId)
                     .apply {
-                        // Optimalisering: spesifiser maksimal størrelse for bildet
-                        size(120, 120) // Tilpass størrelsen til visningen
-                        scale(Scale.FIT) // Behold bildets proporsjoner
+                        // Optimalizing max size of image
+                        size(120, 120) // adjusting the size
+                        scale(Scale.FIT)
                     }
                     .build()
             )
