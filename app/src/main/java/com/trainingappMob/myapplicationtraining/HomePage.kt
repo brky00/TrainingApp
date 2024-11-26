@@ -62,15 +62,8 @@ fun HomePage(navController: NavHostController, viewModel: MealViewModel) {
             val loading by viewModel.loading.collectAsState()
             var selectedGoal by remember { mutableStateOf<String?>("Please choose a goal") }
 
-            // background image
-            Image(
-                painter = painterResource(id = R.drawable.fitnessimage),
-                contentDescription = "Fitness Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer(alpha = 0.5f) // Opacity 0.5
-            )
+
+
 
             // content
             Column(
