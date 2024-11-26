@@ -72,7 +72,7 @@ fun NavigationBetweenPages(
             HomePage(navController, viewModel = mealViewModel)
         }
         composable(route = "meal_page") {
-            RegisterMeal(navController)
+            Meal(navController)
         }
         composable(route = "workout_page") {
             RegisterWorkout(navController)

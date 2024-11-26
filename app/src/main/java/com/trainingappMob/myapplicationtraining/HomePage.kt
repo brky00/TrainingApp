@@ -2,6 +2,7 @@ package com.trainingappMob.myapplicationtraining
 
 import BottomNavBar
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -40,7 +41,11 @@ import com.trainingappMob.myapplicationtraining.components.MealCard
 import com.trainingappMob.myapplicationtraining.viewService.MealViewModel
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 
 // version new version new last
@@ -48,6 +53,28 @@ import androidx.compose.ui.text.font.FontStyle
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomePage(navController: NavHostController, viewModel: MealViewModel) {
+    val firestore = FirebaseFirestore.getInstance()
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+    val context = LocalContext.current
+
+    // State to hold the total score dynamically
+    var totalScore by remember { mutableStateOf("0") }
+
+    // Fetch the current user's totalScore dynamically
+    LaunchedEffect(currentUser) {
+        try {
+            currentUser?.let { user ->
+                val userDoc = firestore.collection("users").document(user.uid).get().await()
+                totalScore = userDoc.getLong("totalScore")?.toString() ?: "0"
+            } ?: run {
+                Toast.makeText(context, "User not logged in. Please log in.", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(context, "Error fetching score: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     Scaffold(
         bottomBar = { BottomNavBar(navController = navController) }
     ) { paddingValues ->
@@ -80,7 +107,7 @@ fun HomePage(navController: NavHostController, viewModel: MealViewModel) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, bottom = 8.dp), // Justering for å plassere til venstre
+                        .padding(start = 16.dp, bottom = 8.dp), // aligned to start
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Card(
@@ -93,7 +120,7 @@ fun HomePage(navController: NavHostController, viewModel: MealViewModel) {
                             modifier = Modifier.fillMaxSize()) {
                             Text(
                                 fontWeight = FontWeight.Bold,
-                                text = "50",
+                                text = totalScore,
                                 color = Color.White,
                                 modifier = Modifier.padding(8.dp)
                             )
