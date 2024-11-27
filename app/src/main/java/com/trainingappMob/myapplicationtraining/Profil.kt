@@ -98,10 +98,10 @@ fun ProfilPage(navController: NavHostController) {
                     text = name,
                     style = TextStyle(
                         color = Color(0xFF6200EA),
-                        fontSize = 24.sp,
+                        fontSize = 23.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    modifier = Modifier.padding(vertical = 4.dp)
                 )
 
                 // Edit Profile button
@@ -123,8 +123,8 @@ fun ProfilPage(navController: NavHostController) {
                     shape = CircleShape,
                     colors = CardDefaults.cardColors(containerColor = Color(0xFF6200EA)),
                     modifier = Modifier
-                        .size(100.dp)
-                        .padding(vertical = 16.dp),
+                        .size(80.dp)
+                        .padding(vertical = 6.dp),
                     elevation = CardDefaults.cardElevation(8.dp)
                 ) {
                     Box(
@@ -135,7 +135,7 @@ fun ProfilPage(navController: NavHostController) {
                             text = totalScore,
                             style = TextStyle(
                                 color = Color.White,
-                                fontSize = 32.sp,
+                                fontSize = 42.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         )
@@ -144,11 +144,11 @@ fun ProfilPage(navController: NavHostController) {
                 Text(
                     text = "Total Score",
                     style = TextStyle(
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF6200EA)
                     ),
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(bottom = 4.dp)
                 )
 
                 // User account info and rows
@@ -192,7 +192,7 @@ fun ProfilPage(navController: NavHostController) {
                     Text(text = "Logout", color = Color.White)
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
                 Button(
                     onClick = {

@@ -68,6 +68,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation("androidx.compose.runtime:runtime-livedata")
+    implementation ("io.coil-kt:coil-compose:2.0.0")
 
 
 

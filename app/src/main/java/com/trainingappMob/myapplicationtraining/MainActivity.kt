@@ -72,7 +72,7 @@ fun NavigationBetweenPages(
             HomePage(navController, viewModel = mealViewModel)
         }
         composable(route = "meal_page") {
-            RegisterMeal(navController)
+            Meal(navController)
         }
         composable(route = "workout_page") {
             RegisterWorkout(navController)
@@ -83,6 +83,11 @@ fun NavigationBetweenPages(
         composable(route = "edit_profile_page") {
             EditProfilePage(navController = navController)
         }
+        composable(route = "edit_meal_page/{mealId}") { backStackEntry ->
+            val mealId = backStackEntry.arguments?.getString("mealId") ?: ""
+            EditMeal(navController = navController, mealId = mealId)
+        }
+
 
     }
 }
