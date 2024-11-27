@@ -1,10 +1,14 @@
 package com.trainingappMob.myapplicationtraining
 
 import BottomNavBar
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,11 +41,14 @@ fun Meal(navController: NavHostController) {
                 val meals = firestore.collection("RecordedMeals")
                     .whereEqualTo("userId", currentUser.uid)
                     .orderBy("recordDate", Query.Direction.DESCENDING)
-                    .limit(7) // limitToLast fjernet for bedre indeksstøtte
+                    .limit(7)
                     .get()
                     .await()
                     .documents
-                    .map { it.data ?: emptyMap() }
+                    .map { doc ->
+                        // adding document-ID as "id"
+                        doc.data?.plus("id" to doc.id) ?: emptyMap()
+                    }
                 recordedMeals = meals
             } else {
                 Toast.makeText(context, "User not logged in. Please log in.", Toast.LENGTH_SHORT).show()
@@ -50,6 +57,7 @@ fun Meal(navController: NavHostController) {
             Toast.makeText(context, "Error loading meals: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     Scaffold(
         bottomBar = { BottomNavBar(navController = navController) }
@@ -182,9 +190,84 @@ fun Meal(navController: NavHostController) {
                             java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault()).format(date)
                         } ?: "Unknown date"
                         Text(text = "Date: $formattedDate")
+
+                        // Row for Edit and Delete Icons
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End // Align to the right side
+                        ){
+                            // Edit Icon
+                            IconButton(onClick = {
+                                val mealId = meal["id"] as? String
+                                if (!mealId.isNullOrEmpty()) {
+                                    navController.navigate("edit_meal_page/$mealId")
+                                } else {
+                                    Toast.makeText(context, "Meal ID is missing or invalid", Toast.LENGTH_SHORT).show()
+                                }
+                            }) {
+                                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Meal")
+                            }
+                            // Delete Icon
+                            IconButton(onClick = {
+                                meal["id"]?.let { mealId ->
+                                    deleteMealAndUpdateScore(
+                                        firestore = firestore,
+                                        mealId = mealId as String,
+                                        userId = currentUser?.uid ?: "",
+                                        context = context,
+                                        onSuccess = {
+                                            recordedMeals = recordedMeals.filterNot { it["id"] == mealId }
+                                        }
+                                    )
+                                }
+                            }) {
+                                Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete Meal")
+                            }
+
+                        }
+
+
+
+
                     }
                 }
+
+
+
             }
         }
+    }
+}
+
+fun deleteMealAndUpdateScore(
+    firestore: FirebaseFirestore,
+    mealId: String,
+    userId: String,
+    context: Context,
+    onSuccess: () -> Unit
+) {
+    try {
+        firestore.collection("RecordedMeals").document(mealId)
+            .delete()
+            .addOnSuccessListener {
+                // Update the user's totalScore
+                firestore.collection("users").document(userId)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        val currentScore = document.getLong("totalScore") ?: 0
+                        val updatedScore = maxOf(0, currentScore - 2) // Prevent negative scores
+                        firestore.collection("users").document(userId)
+                            .update("totalScore", updatedScore)
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "Meal deleted and score updated with -2!", Toast.LENGTH_SHORT).show()
+                                onSuccess()
+                            }
+                    }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Failed to delete meal: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    } catch (e: Exception) {
+        Toast.makeText(context, "Error deleting meal: ${e.message}", Toast.LENGTH_SHORT).show()
     }
 }
