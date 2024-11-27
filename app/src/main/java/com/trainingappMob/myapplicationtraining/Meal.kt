@@ -175,66 +175,95 @@ fun Meal(navController: NavHostController) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(recordedMeals) { meal ->
-                    Column(
+                    // Added Card for better styling
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp),
-                        verticalArrangement = Arrangement.SpaceBetween
+                            .padding(8.dp), // Space between records
+                        shape = MaterialTheme.shapes.medium,
+                        elevation = CardDefaults.cardElevation(4.dp), // Shadow effect for better UI
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer // Light purple background
+                        )
                     ) {
-                        Text(text = "Meal Name: ${meal["mealName"] ?: "Unknown"}")
-                        Text(text = "Calories: ${meal["calories"] ?: "Unknown"}")
-                        Text(text = "Protein: ${meal["protein"] ?: "Unknown"}")
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp), // Inner padding for each record
+                            verticalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            // Meal information
+                            Text(
+                                text = "Meal Name: ${meal["mealName"] ?: "Unknown"}",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                text = "Calories: ${meal["calories"] ?: "Unknown"}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = "Protein: ${meal["protein"] ?: "Unknown"}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
 
-                        val timestamp = meal["recordDate"] as? com.google.firebase.Timestamp
-                        val formattedDate = timestamp?.toDate()?.let { date ->
-                            java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault()).format(date)
-                        } ?: "Unknown date"
-                        Text(text = "Date: $formattedDate")
+                            val timestamp = meal["recordDate"] as? com.google.firebase.Timestamp
+                            val formattedDate = timestamp?.toDate()?.let { date ->
+                                java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault()).format(date)
+                            } ?: "Unknown date"
+                            Text(
+                                text = "Date: $formattedDate",
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
+                            )
 
-                        // Row for Edit and Delete Icons
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End // Align to the right side
-                        ){
-                            // Edit Icon
-                            IconButton(onClick = {
-                                val mealId = meal["id"] as? String
-                                if (!mealId.isNullOrEmpty()) {
-                                    navController.navigate("edit_meal_page/$mealId")
-                                } else {
-                                    Toast.makeText(context, "Meal ID is missing or invalid", Toast.LENGTH_SHORT).show()
-                                }
-                            }) {
-                                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Meal")
-                            }
-                            // Delete Icon
-                            IconButton(onClick = {
-                                meal["id"]?.let { mealId ->
-                                    deleteMealAndUpdateScore(
-                                        firestore = firestore,
-                                        mealId = mealId as String,
-                                        userId = currentUser?.uid ?: "",
-                                        context = context,
-                                        onSuccess = {
-                                            recordedMeals = recordedMeals.filterNot { it["id"] == mealId }
-                                        }
+                            // Row for Edit and Delete Icons
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End // Align icons to the right
+                            ) {
+                                // Delete Icon
+                                IconButton(onClick = {
+                                    meal["id"]?.let { mealId ->
+                                        deleteMealAndUpdateScore(
+                                            firestore = firestore,
+                                            mealId = mealId as String,
+                                            userId = currentUser?.uid ?: "",
+                                            context = context,
+                                            onSuccess = {
+                                                recordedMeals = recordedMeals.filterNot { it["id"] == mealId }
+                                            }
+                                        )
+                                    }
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Delete Meal",
+                                        modifier = Modifier.padding(end = 8.dp), // Space between icons
+                                        tint = MaterialTheme.colorScheme.error // Red color for delete
                                     )
                                 }
-                            }) {
-                                Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete Meal")
+
+                                // Edit Icon
+                                IconButton(onClick = {
+                                    val mealId = meal["id"] as? String
+                                    if (!mealId.isNullOrEmpty()) {
+                                        navController.navigate("edit_meal_page/$mealId")
+                                    } else {
+                                        Toast.makeText(context, "Meal ID is missing or invalid", Toast.LENGTH_SHORT).show()
+                                    }
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = "Edit Meal",
+                                        tint = MaterialTheme.colorScheme.primary // Default primary color for edit
+                                    )
+                                }
                             }
-
                         }
-
-
-
-
                     }
                 }
-
-
-
             }
+
         }
     }
 }
