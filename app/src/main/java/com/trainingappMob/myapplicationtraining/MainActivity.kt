@@ -65,9 +65,7 @@ fun NavigationBetweenPages(
         composable(route = "login_page") {
             LoginPage(navController = navController)
         }
-        composable(route = "register_page") {
-            RegisterPage(navController = navController)
-        }
+
         composable(route = "home_page") {
             HomePage(navController, viewModel = mealViewModel)
         }
@@ -75,8 +73,9 @@ fun NavigationBetweenPages(
             Meal(navController)
         }
         composable(route = "workout_page") {
-            RegisterWorkout(navController)
+            Workout(navController)
         }
+
         composable(route = "profil_page") {
             ProfilPage(navController)
         }
@@ -87,10 +86,16 @@ fun NavigationBetweenPages(
             val mealId = backStackEntry.arguments?.getString("mealId") ?: ""
             EditMeal(navController = navController, mealId = mealId)
         }
+        composable(route = "edit_workout_page/{workoutId}") { backStackEntry ->
+            val workoutId = backStackEntry.arguments?.getString("workoutId") ?: ""
+            EditWorkout(navController = navController, workoutId = workoutId)
+        }
+
 
 
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
