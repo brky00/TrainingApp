@@ -165,9 +165,9 @@ fun HomePage(navController: NavHostController, viewModel: MealViewModel) {
                             contentAlignment = Alignment.Center) {
                             Image(
                                 painter = painterResource(id = R.drawable.buildmuscles),
-                                contentDescription = "Card Image",
+                                contentDescription = "build muscles",
                                 contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize().graphicsLayer(alpha = 0.8f)
+                                modifier = Modifier.fillMaxSize().graphicsLayer(alpha = 0.6f)
                             )
                             Text(
                                 text = "Build muscle",
@@ -198,7 +198,7 @@ fun HomePage(navController: NavHostController, viewModel: MealViewModel) {
                                 painter = painterResource(id = R.drawable.loseweight),
                                 contentDescription = "Lose weight",
                                 contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
+                                modifier = Modifier.fillMaxSize().graphicsLayer(alpha = 0.6f)
                             )
                             Text(
                                 text = "Lose weight",
