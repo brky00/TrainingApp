@@ -120,6 +120,11 @@ fun Meal(navController: NavHostController) {
                                 .addOnSuccessListener {
                                     Toast.makeText(context, "Meal successfully saved", Toast.LENGTH_SHORT).show()
 
+                                    // puts fields to empity again
+                                    mealName = ""
+                                    calories = ""
+                                    protein = ""
+
                                     // Updating total score
                                     firestore.collection("users").document(currentUser.uid)
                                         .get()
@@ -143,8 +148,9 @@ fun Meal(navController: NavHostController) {
                                         .limit(7)
                                         .get()
                                         .addOnSuccessListener { snapshot ->
-                                            recordedMeals = snapshot.documents.map { it.data ?: emptyMap() }
+                                            recordedMeals = snapshot.documents.map { it.data?.plus("id" to it.id) ?: emptyMap() }
                                         }
+
                                 }
                                 .addOnFailureListener {
                                     Toast.makeText(context, "Failed to save meal: ${it.message}", Toast.LENGTH_SHORT).show()
@@ -221,6 +227,22 @@ fun Meal(navController: NavHostController) {
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.End // Align icons to the right
                             ) {
+
+                                // Edit Icon
+                                IconButton(onClick = {
+                                    val mealId = meal["id"] as? String
+                                    if (!mealId.isNullOrEmpty()) {
+                                        navController.navigate("edit_meal_page/$mealId")
+                                    } else {
+                                        Toast.makeText(context, "Meal ID is missing or invalid", Toast.LENGTH_SHORT).show()
+                                    }
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = "Edit Meal",
+                                        tint = MaterialTheme.colorScheme.primary // Default primary color for edit
+                                    )
+                                }
                                 // Delete Icon
                                 IconButton(onClick = {
                                     meal["id"]?.let { mealId ->
@@ -243,21 +265,7 @@ fun Meal(navController: NavHostController) {
                                     )
                                 }
 
-                                // Edit Icon
-                                IconButton(onClick = {
-                                    val mealId = meal["id"] as? String
-                                    if (!mealId.isNullOrEmpty()) {
-                                        navController.navigate("edit_meal_page/$mealId")
-                                    } else {
-                                        Toast.makeText(context, "Meal ID is missing or invalid", Toast.LENGTH_SHORT).show()
-                                    }
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Edit,
-                                        contentDescription = "Edit Meal",
-                                        tint = MaterialTheme.colorScheme.primary // Default primary color for edit
-                                    )
-                                }
+
                             }
                         }
                     }
