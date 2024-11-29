@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
+//Navigation system Logic and routes here
 @Composable
 fun NavigationBetweenPages(
     navController: NavHostController,
@@ -65,6 +65,10 @@ fun NavigationBetweenPages(
         composable(route = "login_page") {
             LoginPage(navController = navController)
         }
+        composable(route = "registrer_page") {
+            RegisterPage(navController = navController)
+        }
+
 
         composable(route = "home_page") {
             HomePage(navController, viewModel = mealViewModel)

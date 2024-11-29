@@ -73,7 +73,7 @@ fun Workout(navController: NavHostController) {
     var totalMinutes by remember { mutableStateOf("") }
     var recordedWorkouts by remember { mutableStateOf<List<Map<String, Any>>>(emptyList()) }
 
-    // Load the last 7 workouts
+    // Loading the last 7 workouts
     LaunchedEffect(currentUser) {
         try {
             if (currentUser != null) {
