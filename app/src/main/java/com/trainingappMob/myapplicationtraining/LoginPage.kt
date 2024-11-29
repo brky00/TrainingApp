@@ -20,7 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.trainingappMob.myapplicationtraining.ui.theme.MyApplicationTrainingTheme
-
+//Login Page
 @Composable
 fun LoginPage(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
@@ -51,7 +51,7 @@ fun LoginPage(navController: NavHostController) {
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation())
         Spacer(modifier = Modifier.height(16.dp))
-
+//auth here checks for user email and password from firebase
         Button(onClick = {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {

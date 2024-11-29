@@ -9,7 +9,7 @@ public open class MealRepository {
     private val firestore = FirebaseFirestore.getInstance()
     private val mealsCollection = firestore.collection("Meals")
 
-    // Get 4 random meals for building muscle
+    // Getting 4 random meals for building muscle
     suspend fun getMealsForBuildMuscle(): List<Meal> {
         val allMeals = mealsCollection
             .whereGreaterThanOrEqualTo("protein", 18)
@@ -27,7 +27,7 @@ public open class MealRepository {
         return allMeals.shuffled().take(4) // Shuffle and select 4 random meals
     }
 
-    // Get 4 random meals for losing weight
+    // Getting 4 random meals for losing weight
     suspend fun getMealsForLoseWeight(): List<Meal> {
         val allMeals = mealsCollection
             .whereLessThanOrEqualTo("calories", 150)
@@ -42,6 +42,6 @@ public open class MealRepository {
                     imageName = document.getString("imageName") ?: ""
                 )
             }
-        return allMeals.shuffled().take(4) // Shuffle and select 4 random meals
+        return allMeals.shuffled().take(4) // Shuffles and selects 4 random meals
     }
 }

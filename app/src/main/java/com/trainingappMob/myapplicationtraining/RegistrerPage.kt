@@ -55,7 +55,7 @@ fun RegisterPage(navController: NavHostController) {
         Spacer(modifier = Modifier.height(8.dp))
         TextField(value = birthdate, onValueChange = { birthdate = it }, label = { Text("Birthdate") })
         Spacer(modifier = Modifier.height(16.dp))
-
+//This will create a account in firebase auth and store user info also in firestore users collection
         Button(onClick = {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
