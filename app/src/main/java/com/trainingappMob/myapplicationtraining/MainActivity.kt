@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
+//Navigation system Logic and routes here
 @Composable
 fun NavigationBetweenPages(
     navController: NavHostController,
@@ -65,27 +65,41 @@ fun NavigationBetweenPages(
         composable(route = "login_page") {
             LoginPage(navController = navController)
         }
-        composable(route = "register_page") {
+        composable(route = "registrer_page") {
             RegisterPage(navController = navController)
         }
+
+
         composable(route = "home_page") {
             HomePage(navController, viewModel = mealViewModel)
         }
         composable(route = "meal_page") {
-            RegisterMeal(navController)
+            Meal(navController)
         }
         composable(route = "workout_page") {
-            RegisterWorkout(navController)
+            Workout(navController)
         }
+
         composable(route = "profil_page") {
             ProfilPage(navController)
         }
         composable(route = "edit_profile_page") {
             EditProfilePage(navController = navController)
         }
+        composable(route = "edit_meal_page/{mealId}") { backStackEntry ->
+            val mealId = backStackEntry.arguments?.getString("mealId") ?: ""
+            EditMeal(navController = navController, mealId = mealId)
+        }
+        composable(route = "edit_workout_page/{workoutId}") { backStackEntry ->
+            val workoutId = backStackEntry.arguments?.getString("workoutId") ?: ""
+            EditWorkout(navController = navController, workoutId = workoutId)
+        }
+
+
 
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

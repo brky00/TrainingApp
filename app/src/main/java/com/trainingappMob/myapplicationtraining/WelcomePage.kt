@@ -41,11 +41,11 @@ fun WelcomeScreen(navController: NavHostController) {
             Text(text = "Login", color = Color.White)
         }
         Button(
-            onClick = { navController.navigate("register_page") },
+            onClick = {navController.navigate("registrer_page") },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EA)),
             modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
-            Text(text = "Register", color = Color.White)
+            Text(text = "Register Account", color = Color.White)
         }
     }
 }
